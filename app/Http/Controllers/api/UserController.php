@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -22,6 +23,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:100',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|string|email|max:255|unique:users,email',
             'no_hp' => 'required|string|max:20|unique:users,no_hp',
             'password' => 'required|string|min:6',
@@ -37,8 +39,17 @@ class UserController extends Controller
         }
 
         try {
+            $fotoPath = null;
+            if ($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                $fileName = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('img/foto'), $fileName);
+                $fotoPath = 'img/foto/' . $fileName;
+            }
+
             $user = User::create([
                 'nama' => $request->nama,
+                'foto' => $fotoPath,
                 'email' => $request->email,
                 'no_hp' => $request->no_hp,
                 'password' => Hash::make($request->password),
@@ -52,7 +63,7 @@ class UserController extends Controller
                 'success' => true,
                 'message' => 'User registered successfully',
                 'data' => [
-                    'user' => $user->only(['id', 'nama', 'email', 'no_hp', 'alamat', 'role']),
+                    'user' => $user->only(['id', 'nama', 'foto', 'email', 'no_hp', 'alamat', 'role']),
                     'token' => $token
                 ]
             ], 201);
@@ -94,7 +105,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'user' => $user->only(['id', 'nama', 'email', 'no_hp', 'alamat', 'role']),
+                    'user' => $user->only(['id', 'nama', 'foto', 'email', 'no_hp', 'alamat', 'role']),
                     'token' => $token
                 ]
             ]);
@@ -267,7 +278,7 @@ class UserController extends Controller
                 'success' => true,
                 'message' => 'Token is valid',
                 'data' => [
-                    'user' => $user->only(['id', 'nama', 'email', 'no_hp', 'alamat', 'role'])
+                    'user' => $user->only(['id', 'nama', 'foto', 'email', 'no_hp', 'alamat', 'role'])
                 ]
             ], 200);
         } catch (JWTException $e) {
@@ -294,6 +305,7 @@ class UserController extends Controller
                 'success' => true,
                 'data' => [
                     'nama' => $user->nama,
+                    'foto' => $user->foto,
                     'email' => $user->email,
                     'no_hp' => $user->no_hp,
                     'alamat' => $user->alamat,
@@ -319,6 +331,7 @@ class UserController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'nama' => 'sometimes|string|max:100',
+                'foto' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'no_hp' => 'sometimes|string|max:20|unique:users,no_hp,' . $user->id,
                 'alamat' => 'sometimes|nullable|string|max:255',
             ]);
@@ -332,6 +345,7 @@ class UserController extends Controller
 
             $oldValues = [
                 'nama' => $user->nama,
+                'foto' => $user->foto,
                 'no_hp' => $user->no_hp,
                 'alamat' => $user->alamat,
             ];
@@ -341,9 +355,23 @@ class UserController extends Controller
                 'no_hp',
                 'alamat',
             ]);
+
+            // Handle file upload
+            if ($request->hasFile('foto')) {
+                // Delete old photo if exists
+                if ($user->foto && file_exists(public_path($user->foto))) {
+                    unlink(public_path($user->foto));
+                }
+
+                $file = $request->file('foto');
+                $fileName = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('img/foto'), $fileName);
+                $updates['foto'] = 'img/foto/' . $fileName;
+            }
+
             $user->update($updates);
 
-            $newValues = $request->only(array_keys($updates));
+            $newValues = array_merge($oldValues, $request->only(array_keys($updates)));
             if ($oldValues !== $newValues) {
                 Log::info('Profile Updated', [
                     'user_id' => $user->id,
@@ -357,6 +385,7 @@ class UserController extends Controller
                 'message' => 'Profile updated successfully',
                 'data' => [
                     'nama' => $user->nama,
+                    'foto' => $user->foto,
                     'email' => $user->email,
                     'no_hp' => $user->no_hp,
                     'alamat' => $user->alamat,

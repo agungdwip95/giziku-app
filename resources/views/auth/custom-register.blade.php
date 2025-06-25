@@ -53,7 +53,8 @@
 
         .form-control,
         .form-control:focus,
-        textarea.form-control {
+        textarea.form-control,
+        input[type="file"].form-control {
             border: none;
             box-shadow: none;
             padding-left: 0;
@@ -182,7 +183,7 @@
     <div class='container'>
         <div class='row'>
             <div class='col-md-12'>
-                <form method="POST" action="/register" class="slideDown">
+                <form method="POST" action="/register" class="slideDown" enctype="multipart/form-data">
                     @csrf
                     <img src="{{ asset('img/logo_crop.png') }}" alt="Logo Giziku" class="login-logo">
                     <h2>Register</h2>
@@ -191,6 +192,13 @@
                             <input type="text" name="nama" class="form-control" id="nama" value="{{ old('nama') }}" required>
                             <label for="nama">Nama</label>
                             @error('nama')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group not-focused">
+                            <input type="file" name="foto" class="form-control" id="foto" accept="image/*">
+                            <label for="foto">Foto</label>
+                            @error('foto')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
@@ -246,14 +254,14 @@
             $(".form-control").focus(function() {
                 $(this).parent().removeClass("not-focused").addClass("focused");
             }).blur(function() {
-                if (!$(this).val()) {
+                if (!$(this).val() && $(this).attr('type') !== 'file') {
                     $(this).parent().removeClass("focused").addClass("not-focused");
                 }
             });
 
             // Inisialisasi status label berdasarkan nilai input
             $(".form-control").each(function() {
-                if ($(this).val()) {
+                if ($(this).val() && $(this).attr('type') !== 'file') {
                     $(this).parent().removeClass("not-focused").addClass("focused");
                 }
             });

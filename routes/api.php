@@ -2,11 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\UserController;
-use App\Http\Controllers\api\ProdukController;
-use App\Http\Controllers\api\AbsensiController;
-use App\Http\Controllers\api\DinasController;
-use App\Http\Controllers\api\AlamatController;
-use App\Http\Controllers\api\PesananController;
 
 Route::prefix('v1')->group(function () {
     // Public routes (no authentication required)

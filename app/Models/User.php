@@ -13,6 +13,7 @@ class User extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'nama',
+        'foto',
         'email',
         'no_hp',
         'password',
@@ -37,5 +38,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function balitas()
+    {
+        return $this->hasMany(Balita::class);
     }
 }
