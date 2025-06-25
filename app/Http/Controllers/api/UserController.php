@@ -28,7 +28,6 @@ class UserController extends Controller
             'no_hp' => 'required|string|max:20|unique:users,no_hp',
             'password' => 'required|string|min:6',
             'alamat' => 'nullable|string|max:255',
-            'role' => 'required|in:admin,ortu',
         ]);
 
         if ($validator->fails()) {
@@ -54,7 +53,7 @@ class UserController extends Controller
                 'no_hp' => $request->no_hp,
                 'password' => Hash::make($request->password),
                 'alamat' => $request->alamat,
-                'role' => $request->role,
+                'role' => 'ortu',
             ]);
 
             $token = JWTAuth::fromUser($user);
@@ -331,7 +330,6 @@ class UserController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'nama' => 'sometimes|string|max:100',
-                'foto' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'no_hp' => 'sometimes|string|max:20|unique:users,no_hp,' . $user->id,
                 'alamat' => 'sometimes|nullable|string|max:255',
             ]);
@@ -345,7 +343,6 @@ class UserController extends Controller
 
             $oldValues = [
                 'nama' => $user->nama,
-                'foto' => $user->foto,
                 'no_hp' => $user->no_hp,
                 'alamat' => $user->alamat,
             ];
@@ -355,19 +352,6 @@ class UserController extends Controller
                 'no_hp',
                 'alamat',
             ]);
-
-            // Handle file upload
-            if ($request->hasFile('foto')) {
-                // Delete old photo if exists
-                if ($user->foto && file_exists(public_path($user->foto))) {
-                    unlink(public_path($user->foto));
-                }
-
-                $file = $request->file('foto');
-                $fileName = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('img/foto'), $fileName);
-                $updates['foto'] = 'img/foto/' . $fileName;
-            }
 
             $user->update($updates);
 
@@ -400,6 +384,67 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update profile: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function uploadImage(Request $request)
+    {
+        try {
+            $user = JWTAuth::user();
+
+            $validator = Validator::make($request->all(), [
+                'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Handle file upload
+            if ($request->hasFile('foto')) {
+                // Delete old photo if exists
+                if ($user->foto && file_exists(public_path($user->foto))) {
+                    unlink(public_path($user->foto));
+                }
+
+                $file = $request->file('foto');
+                $fileName = Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('img/foto'), $fileName);
+                $fotoPath = 'img/foto/' . $fileName;
+
+                // Update user foto
+                $user->update(['foto' => $fotoPath]);
+
+                Log::info('Profile Image Updated', [
+                    'user_id' => $user->id,
+                    'new_foto' => $fotoPath
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Profile image updated successfully',
+                    'data' => [
+                        'foto' => $user->foto
+                    ]
+                ], 200);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No image file provided'
+            ], 400);
+        } catch (\Exception $e) {
+            Log::error('Profile Image Update Error: ', [
+                'user_id' => $user->id ?? null,
+                'error' => $e->getMessage()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile image: ' . $e->getMessage()
             ], 500);
         }
     }
