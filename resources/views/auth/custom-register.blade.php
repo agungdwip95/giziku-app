@@ -242,7 +242,12 @@
                         <button type="submit" class="btn btn-primary">Register</button>
                         <div class="register-link">
                             Sudah punya akun? <a href="/login">Login</a>
-                        </div>
+                        </div><br>
+                        <div class="text-center mt-2">
+                            <a href="/dashboard" style="color: #007C91; text-decoration: none;">
+                                <b><i class="fas fa-arrow-left"></i> Kembali ke dashboard</b>
+                            </a>
+                        </div><br>
                     </div>
                 </form>
             </div>

@@ -89,34 +89,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-7 col-12 mb-4 mb-md-6 mb-lg-0 order-0">
-                <img class="mb-4" src="{{ asset('assets/img/logo_ewisatasarmi.png') }}" style="height: 45px; width: 95px;" alt="ewisatasarmi" />
-                <p class="fs--1 text-secondary mb-0 fw-medium">Plan your journey with ease, enjoy seamless travel experiences.</p>
+                <img class="mb-4" src="{{ asset('img/logo_crop.png') }}" style="height: 50px; width: 50px;" alt="ewisatasarmi" />
+                <p class="fs--1 text-secondary mb-0 fw-medium">Nourish your body with ease, embrace healthy eating experiences.</p>
             </div>
-            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0 order-lg-1 order-md-2">
-                <h4 class="fw-bold font-sans-serif mb-3 mb-lg-4 text-dark">Explore</h4>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="/dashboard#service">Category</a></li>
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="/dashboard#destination">Destination</a></li>
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="/dashboard#booking">Package</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0 order-lg-2 order-md-3">
-                <h4 class="fw-bold font-sans-serif mb-3 mb-lg-4 text-dark">Support</h4>
-                <ul class="list-unstyled mb-0">
-                    <!-- <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="#!">Help/FAQ</a></li> -->
-                    
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="#/dashboard#testimonial">Testimonial</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-2 col-md-4 mb-4 mb-lg-0 order-lg-3 order-md-4">
-                <h4 class="fw-bold font-sans-serif mb-3 mb-lg-4 text-dark">More</h4>
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="/dashboard#tips">Tips</a></li>
-                    <li class="mb-2"><a class="link-dark fs-1 fw-medium text-decoration-none" href="/dashboard#highlight-event">Event</a></li>
-                   
-                </ul>
-            </div>
-            <div class="col-lg-3 col-md-5 col-12 mb-4 mb-md-6 mb-lg-0 order-lg-4 order-md-1">
+            <div class="col-lg-3 col-md-5 col-12 mb-4 mb-md-6 mb-lg-0 order-lg-4 order-md-1 ms-auto">
                 <div class="icon-group mb-4">
                     <a class="text-decoration-none icon-item shadow-social" id="facebook" href="#!"><i class="fab fa-facebook-f"></i></a>
                     <a class="text-decoration-none icon-item shadow-social" id="instagram" href="#!"><i class="fab fa-instagram"></i></a>

@@ -28,7 +28,7 @@
                     Dengan fitur seperti cek status gizi, edukasi MPASI, jadwal posyandu, hingga konsultasi langsung, GIZIKU hadir sebagai solusi digital pencegahan stunting.
                     Petugas puskesmas juga dapat mengelola data balita, validasi pengukuran manual, serta melihat laporan dan statistik gizi.
                 </p>
-                <div class="text-center text-md-start">
+                <!-- <div class="text-center text-md-start">
                     <a class="btn btn-primary btn-lg me-md-4 mb-3 mb-md-0 border-0 primary-btn-shadow" href="/dashboard#fitur" role="button">Lihat Fitur Aplikasi</a>
                     <div class="w-100 d-block d-md-none"></div>
                     <a href="#!" role="button" data-bs-toggle="modal" data-bs-target="#popupVideo">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -74,7 +74,7 @@
       <div class="row g-4">
         <!-- Admin Box -->
         <div class="col-md-6">
-          <div class="card text-white shadow-sm border-0" style="background-color: #2193b0; border-radius: 16px;">
+          <div class="card text-white shadow-sm border-0" style="background-color: #F7931E; border-radius: 16px;">
             <div class="card-body position-relative d-flex flex-column justify-content-between" style="min-height: 200px;">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
@@ -94,7 +94,7 @@
 
         <!-- Wisata Box -->
         <div class="col-md-6">
-          <div class="card text-white shadow-sm border-0" style="background-color:rgb(162, 137, 83); border-radius: 16px;">
+          <div class="card text-white shadow-sm border-0" style="background-color: #F7931E; border-radius: 16px;">
             <div class="card-body position-relative d-flex flex-column justify-content-between" style="min-height: 200px;">
               <div class="d-flex justify-content-between align-items-start">
                 <div>

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit Profil Saya</h1>
+                    <h1 class="m-0">Edit Data User</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right"></ol>
@@ -19,13 +19,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-sm-12">
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <ul>
@@ -38,59 +31,58 @@
                     @endif
 
                     <div class="card">
-                        <div class="card-header">Form Edit Profil</div>
+                        <div class="card-header">Form Edit User</div>
                         <div class="card-body">
-                            <form action="{{ url('/profile/update') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-
+                                @method('PUT')
                                 <div class="mb-3">
                                     <label for="nama" class="form-label">Nama</label>
-                                    <input type="text" name="nama" id="nama" class="form-control"
-                                           value="{{ old('nama', $user->nama) }}" required>
+                                    <input type="text" name="nama" id="nama" class="form-control" value="{{ old('nama', $user->nama) }}" required placeholder="Masukkan nama user" autocomplete="off">
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="foto" class="form-label">Foto</label>
-                                    <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
+                                    <input type="file" name="foto" id="foto" class="form-control" accept="image/jpeg,image/png">
                                     @if ($user->foto)
                                         <div class="mt-2">
-                                            <img src="{{ asset($user->foto) }}" alt="Foto Profil" width="100">
+                                            <img src="{{ asset($user->foto) }}" alt="Foto User" style="max-width: 100px; height: auto;">
                                             <p>Current: {{ $user->foto }}</p>
                                         </div>
                                     @endif
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email" class="form-control"
-                                           value="{{ old('email', $user->email) }}" required>
+                                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required placeholder="Masukkan email" autocomplete="off">
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="no_hp" class="form-label">No HP</label>
-                                    <input type="text" name="no_hp" id="no_hp" class="form-control"
-                                           value="{{ old('no_hp', $user->no_hp) }}">
+                                    <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ old('no_hp', $user->no_hp) }}" required placeholder="Masukkan nomor HP" autocomplete="off">
                                 </div>
-
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Password (Kosongkan jika tidak diubah)</label>
-                                    <input type="password" name="password" id="password" class="form-control">
+                                    <label for="password" class="form-label">Password (Kosongkan jika tidak ingin mengubah)</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru">
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Konfirmasi password baru">
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="alamat" class="form-label">Alamat</label>
-                                    <textarea name="alamat" id="alamat" class="form-control" rows="4">{{ old('alamat', $user->alamat) }}</textarea>
+                                    <textarea name="alamat" id="alamat" class="form-control" rows="4" placeholder="Masukkan alamat">{{ old('alamat', $user->alamat) }}</textarea>
                                 </div>
-
-                                {{-- Role tidak perlu ditampilkan/diubah sendiri oleh admin --}}
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                                    <a href="{{ url('/dashboard') }}" class="btn btn-secondary btn-sm">Batal</a>
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select name="role" id="role" class="form-control" required>
+                                        <option value="">-- Pilih Role --</option>
+                                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="ortu" {{ old('role', $user->role) == 'ortu' ? 'selected' : '' }}>Ortu</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                        <a href="{{ route('user.index') }}" class="btn btn-secondary btn-sm">Batal</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>

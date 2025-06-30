@@ -180,8 +180,14 @@
     }
 
     .main-sidebar {
-      background: linear-gradient(180deg, #fef6ed, #fddbb2);
+      /* background: linear-gradient(180deg, #F7931E, #007C91); */
+      background: #007C91;
       color: white;
+    }
+
+    .main-sidebar .nav-link:hover p,
+    .main-sidebar .nav-link:hover i {
+        color: #F7931E !important;
     }
 
     .content-wrapper{
@@ -203,29 +209,55 @@
 
 @guest
 
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top py-5 d-block" data-navbar-on-scroll="data-navbar-on-scroll">
-      <div class="container">
-         <a class="navbar-brand" href="/dashboard">
-            <img src="{{ asset('img/logo.png') }}" style="height: 100px; width: 100px;" alt="logo" />
-        </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
-              <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base align-items-lg-center align-items-center">
-                  <!-- <li class="nav-item px-3 px-xl-4"><a class="nav-link fw-medium" aria-current="page" href="/login">Login</a></li> -->
-                  <li class="nav-item px-3 px-xl-4"><a class="btn btn-outline-dark order-1 order-lg-0 fw-medium" href="/login">Login</a></li>
-                  <!-- <li class="nav-item dropdown px-3 px-lg-0">
-                      <a class="d-inline-block ps-0 py-2 pe-3 text-decoration-none dropdown-toggle fw-medium" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">EN</a>
-                      <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg" style="border-radius:0.3rem;" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="#!">EN</a></li>
-                          <li><a class="dropdown-item" href="#!">BN</a></li>
-                      </ul>
-                  </li> -->
-              </ul>
-          </div>
-      </div>
-  </nav>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  .navbar-transparent {
+    background-color: transparent !important;
+    backdrop-filter: blur(5px);
+  }
+  .navbar-transparent .navbar-brand,
+  .navbar-transparent .navbar-nav .nav-link,
+  .navbar-transparent .btn {
+    color: #000 !important; /* Changed to black for text */
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.5); /* White shadow for contrast on dark backgrounds */
+    font-family: 'Poppins', sans-serif;
+  }
+  .navbar-transparent .navbar-brand span {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .navbar-transparent .btn-outline-dark {
+    border-color: #000 !important; /* Black border for button */
+    color: #000 !important; /* Black text for button */
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    font-family: 'Poppins', sans-serif;
+  }
+  .navbar-transparent .btn-outline-dark:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important; /* Subtle black hover effect */
+  }
+  .navbar-transparent .navbar-toggler-icon {
+    filter: none; /* Remove invert filter to keep default (dark) toggler icon */
+  }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block navbar-transparent">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="/dashboard">
+      <img src="{{ asset('img/logo_crop.png') }}" alt="logo" width="40" height="40" class="me-2">
+      <span>Giziku</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base align-items-lg-center align-items-center">
+        <li class="nav-item px-3 px-xl-4"><a class="btn btn-outline-dark order-1 order-lg-0 fw-medium" href="/login">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  
 @endguest
 
 @can('isAdmin')
@@ -254,7 +286,7 @@
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Right navbar links -->
-    <ul class="navbar-nav" style="margin-left: 1050px;">
+    <ul class="navbar-nav" style="margin-left: 980px;">
       <!-- <li class="nav-item" style="margin-right: 1150px;"> -->
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -262,8 +294,9 @@
        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->nama }} | {{ Auth::user()->role }}</span>
-            <img class="img-profile rounded-circle"
-                src="{{asset('img/user.png')}}"/>
+            <!-- <img class="img-profile rounded-circle"
+                src="{{asset('img/user.png')}}"/> -->
+            <img class="img-profile rounded-circle" src="{{ asset(Auth::user()->foto ?? 'img/user.png') }}" width="20" height="20" alt="Profile Photo">
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -282,8 +315,9 @@
       <!-- <li class="nav-item" style="margin-right: 1150px;"> -->
        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img class="img-profile rounded-circle"
-                src="{{asset('img/user.png')}}"/>
+            <!-- <img class="img-profile rounded-circle"
+                src="{{asset('img/user.png')}}"/> -->
+            <img class="img-profile rounded-circle" src="{{ asset(Auth::user()->foto ?? 'img/user.png') }}" width="20" height="20" alt="Profile Photo">
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
