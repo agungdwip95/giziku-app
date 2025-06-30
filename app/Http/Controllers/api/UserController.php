@@ -26,7 +26,7 @@ class UserController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|string|email|max:255|unique:users,email',
             'no_hp' => 'required|string|max:20|unique:users,no_hp',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string',
             'alamat' => 'nullable|string|max:255',
         ]);
 
