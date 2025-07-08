@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\api;
 
 use App\Models\PengukuranGizi;
@@ -40,38 +41,42 @@ class PengukuranGiziController extends Controller
             $usia = $validated['usia_bulan'];
             $tinggi = $validated['tinggi_badan'];
 
-            // Standar tinggi badan berdasarkan WHO (sederhana untuk ilustrasi)
-            $standar_tinggi = [
-                0 => 49.9,  // usia 0 bulan
-                1 => 54.7,
-                2 => 58.4,
-                3 => 61.4,
-                4 => 63.9,
-                5 => 65.9,
-                6 => 67.6,
-                12 => 76.1,
-                18 => 81.7,
-                24 => 85.5,
-                36 => 95.2,
-                48 => 102.3,
-                60 => 109.2,
+            // Standar WHO Z-score (umum tanpa jenis kelamin, disederhanakan)
+            $standar_tb = [
+                0 => ['median' => 49.9, 'sd_minus_2' => 46.1, 'sd_minus_3' => 44.2],
+                1 => ['median' => 54.7, 'sd_minus_2' => 50.8, 'sd_minus_3' => 48.9],
+                2 => ['median' => 58.4, 'sd_minus_2' => 54.4, 'sd_minus_3' => 52.3],
+                3 => ['median' => 61.4, 'sd_minus_2' => 57.3, 'sd_minus_3' => 55.0],
+                4 => ['median' => 63.9, 'sd_minus_2' => 59.8, 'sd_minus_3' => 57.5],
+                5 => ['median' => 65.9, 'sd_minus_2' => 61.8, 'sd_minus_3' => 59.5],
+                6 => ['median' => 67.6, 'sd_minus_2' => 63.0, 'sd_minus_3' => 60.0],
+                12 => ['median' => 76.1, 'sd_minus_2' => 71.0, 'sd_minus_3' => 68.0],
+                18 => ['median' => 81.7, 'sd_minus_2' => 76.0, 'sd_minus_3' => 73.0],
+                24 => ['median' => 85.5, 'sd_minus_2' => 79.5, 'sd_minus_3' => 76.0],
+                36 => ['median' => 95.2, 'sd_minus_2' => 89.5, 'sd_minus_3' => 86.0],
+                48 => ['median' => 102.3, 'sd_minus_2' => 96.5, 'sd_minus_3' => 92.5],
+                60 => ['median' => 109.2, 'sd_minus_2' => 103.3, 'sd_minus_3' => 99.0],
             ];
 
-            // Cari standar terdekat
-            $usiaTerdekat = array_key_last($standar_tinggi);
-            foreach ($standar_tinggi as $bulan => $tb) {
+            // Cari usia terdekat
+            $usiaTerdekat = array_key_first($standar_tb);
+            foreach ($standar_tb as $bulan => $data) {
                 if ($usia <= $bulan) {
                     $usiaTerdekat = $bulan;
                     break;
                 }
             }
 
-            $median_tb = $standar_tinggi[$usiaTerdekat];
-            $selisih = $tinggi - $median_tb;
+            $standar = $standar_tb[$usiaTerdekat];
 
-            // Aturan sederhana: Jika tinggi < -2 SD dari median → Stunting, else Normal
-            // Asumsi SD = 1 untuk simplifikasi (realnya gunakan Z-score WHO)
-            $status_gizi = $selisih < -2 ? 'Stunting' : 'Normal';
+            // Tentukan status gizi
+            if ($tinggi < $standar['sd_minus_3']) {
+                $status_gizi = 'Stunting Berat';
+            } elseif ($tinggi < $standar['sd_minus_2']) {
+                $status_gizi = 'Stunting';
+            } else {
+                $status_gizi = 'Normal';
+            }
 
             // Simpan data
             $pengukuran = PengukuranGizi::create([

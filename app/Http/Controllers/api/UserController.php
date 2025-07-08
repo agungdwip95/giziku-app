@@ -303,6 +303,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
+                    'id' => $user->id,
                     'nama' => $user->nama,
                     'foto' => $user->foto,
                     'email' => $user->email,
